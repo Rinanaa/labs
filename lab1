@@ -1,0 +1,90 @@
+import java.util.*;
+import java.lang.*;
+
+public class Main {
+    public static void main(String[] args)
+    {
+        short num1 = 23;
+        int num2 = 4856;
+        long num3 = -89;
+        float num4 = 45.765f;
+        double num5 = -12.8437563d;
+
+        List<Number> numbers = new ArrayList<>();
+        numbers.add(num1);
+        numbers.add(num2);
+        numbers.add(num3);
+        numbers.add(num4);
+        numbers.add(num5);
+
+        System.out.println("Numbers: " + numbers);
+
+        List<Integer> integers = new ArrayList<>();
+        List<Double> doubles = new ArrayList<>();
+        double sum = 0;
+
+        for (Number number : numbers) {
+            String num = number.toString();
+
+            double dnum = Double.parseDouble(num);
+            doubles.add(dnum);
+
+            sum += dnum;
+
+            int inum = (int) dnum;
+            integers.add(inum);
+        }
+
+        System.out.println("Numbers as integers: " + integers);
+
+        System.out.print("Numbers as floats: ");
+        doubles.forEach((n) -> {System.out.print(String.format("%.2f; ", n));});
+        System.out.println();
+
+        List<Short> shorts = new ArrayList<>();
+        List<Integer> intg = new ArrayList<>();
+        List<Long> longs = new ArrayList<>();
+        List<Float> floats = new ArrayList<>();
+        List<Double> doub = new ArrayList<>();
+
+        for (Number number: numbers){
+            try {
+                short sh = (short) number;
+                shorts.add(sh);
+            }
+            catch (Exception e){}
+
+            try {
+                int in = (int) number;
+                intg.add(in);
+            }
+            catch (Exception e){}
+
+            try {
+                long ln = (long) number;
+                longs.add(ln);
+            }
+            catch (Exception e){}
+
+            try {
+                float fl = (float) number;
+                floats.add(fl);
+            }
+            catch (Exception e){}
+
+            try {
+                double db = (double) number;
+                doub.add(db);
+            }
+            catch (Exception e){}
+        }
+
+        System.out.println("Shorts: " + shorts);
+        System.out.println("Integers: " + intg);
+        System.out.println("Longs: " + longs);
+        System.out.println("Floats: " + floats);
+        System.out.println("Doubles: " + doub);
+
+        System.out.println("Sum: " + sum);
+    }
+}
