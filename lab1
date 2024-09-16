@@ -1,5 +1,6 @@
 import java.util.*;
 import java.lang.*;
+import java.math.*;
 
 public class Main {
     public static void main(String[] args)
@@ -9,6 +10,7 @@ public class Main {
         long num3 = -89;
         float num4 = 45.765f;
         double num5 = -12.8437563d;
+        BigDecimal num6 = new BigDecimal("563845643547.56836873465738734658734658374");
 
         List<Number> numbers = new ArrayList<>();
         numbers.add(num1);
@@ -16,67 +18,77 @@ public class Main {
         numbers.add(num3);
         numbers.add(num4);
         numbers.add(num5);
+        numbers.add(num6);
 
         System.out.println("Numbers: " + numbers);
 
-        List<Integer> integers = new ArrayList<>();
-        List<Double> doubles = new ArrayList<>();
-        double sum = 0;
+        List<BigDecimal> integers = new ArrayList<>();
+        List<BigDecimal> doubles = new ArrayList<>();
+        BigDecimal sum = new BigDecimal(0);
 
         for (Number number : numbers) {
-            String num = number.toString();
 
-            double dnum = Double.parseDouble(num);
-            doubles.add(dnum);
+            BigDecimal big = new BigDecimal(number.toString());
+            sum = sum.add(big);
 
-            sum += dnum;
-
-            int inum = (int) dnum;
-            integers.add(inum);
+            integers.add(big.setScale(0, RoundingMode.HALF_UP));
+            doubles.add(big.setScale(2, RoundingMode.HALF_UP));
         }
 
         System.out.println("Numbers as integers: " + integers);
 
-        System.out.print("Numbers as floats: ");
-        doubles.forEach((n) -> {System.out.print(String.format("%.2f; ", n));});
-        System.out.println();
+        System.out.println("Numbers as floats: " + doubles);
 
         List<Short> shorts = new ArrayList<>();
         List<Integer> intg = new ArrayList<>();
         List<Long> longs = new ArrayList<>();
         List<Float> floats = new ArrayList<>();
         List<Double> doub = new ArrayList<>();
+        List<BigDecimal> bigd = new ArrayList<>();
+
 
         for (Number number: numbers){
+            int x = 0;
+
             try {
                 short sh = (short) number;
                 shorts.add(sh);
+                x = 1;
             }
             catch (Exception e){}
 
             try {
                 int in = (int) number;
                 intg.add(in);
+                x = 1;
             }
             catch (Exception e){}
 
             try {
                 long ln = (long) number;
                 longs.add(ln);
+                x = 1;
             }
             catch (Exception e){}
 
             try {
                 float fl = (float) number;
                 floats.add(fl);
+                x = 1;
             }
             catch (Exception e){}
 
             try {
                 double db = (double) number;
                 doub.add(db);
+                x = 1;
             }
             catch (Exception e){}
+
+            if (x == 0){
+                BigDecimal bgd = new BigDecimal(number.toString());
+                bigd.add(bgd);
+            }
         }
 
         System.out.println("Shorts: " + shorts);
@@ -84,6 +96,7 @@ public class Main {
         System.out.println("Longs: " + longs);
         System.out.println("Floats: " + floats);
         System.out.println("Doubles: " + doub);
+        System.out.println("BigDecimals: " + bigd);
 
         System.out.println("Sum: " + sum);
     }
