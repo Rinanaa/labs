@@ -2,87 +2,93 @@ import java.util.ArrayList;
 
 public class Main {
 
-    public static void main (String[] args) {
+    public static Product addProduct (FnBFactory fnbFactory, WeaponFactory weaponFactory){
 
-        ArrayList<Room> rooms = new ArrayList<>();
+        return switch (Input.inputInt("""
+                Which product do you want to add?
+                1. Water
+                2. Vegetables
+                3. Meat
+                4. Gun
+                5. Sword
+                6. Knife
+                Input: """, 1, 6)){
 
-        rooms.add(new Room("Bedroom", 2, new Light()));
-        rooms.add(new Room("Bathroom", 1, new Light(true, 1)));
-        rooms.add(new Room("Kitchen", 3, new Light()));
+            case 1 -> fnbFactory.createWater();
+            case 2 -> fnbFactory.createVegetables();
+            case 3 -> fnbFactory.createMeat();
+            case 4 -> weaponFactory.createGuns();
+            case 5 -> weaponFactory.createSwords();
+            case 6 -> weaponFactory.createKnives();
+            default -> throw new IllegalArgumentException("How?...");
+        };
+    }
 
-        House house = new House(new Thermostat(), rooms);
+    public static void main(String[] args) {
 
-        while (true) {
+        FnBFactory fnbFactory = new FnBFactory();
+        WeaponFactory weaponFactory = new WeaponFactory();
 
-            int a = Input.inputInt("""
-                    1. Show rooms
-                    2. Show thermostat
-                    3. Exit
-                    Input: """, 1, 3);
+        ArrayList<Product> weapons = new ArrayList<>();
+        ArrayList<Product> fnb = new ArrayList<>();
 
-            if (a == 1) {
+        while (true){
+             switch (Input.inputInt("""
+                    1. Show all products
+                    2. Show weapons
+                    3. Show Food&Beverages
+                    4. Add product
+                    5. Exit
+                    Input: """, 1, 5)){
 
-                house.displayRooms();
+                 case 1:
 
-                int roomNum = Input.inputInt("""
-                        Enter room number or return (0): """, 0, house.rooms.size());
+                     if (weapons.isEmpty() && fnb.isEmpty()) {
+                         System.out.println("No products");
+                     }
+                     else {
+                     Product.displayProductArray(weapons);
+                     Product.displayProductArray(fnb);
+                     }
+                     break;
 
+                 case 2:
 
+                     if (weapons.isEmpty()) {
+                         System.out.println("No weapons");
+                     }
+                     else {
+                         Product.displayProductArray(weapons);
+                     }
+                     break;
 
-                    if (roomNum == 0) {
-                        break;
-                    }
+                 case 3:
 
-                    else {
-                        roomNum--;
-                        while (true) {
-                            int b = Input.inputInt("""
-                                    1. Display cameras
-                                    2. Display light
-                                    3. Return
-                                    Input: """, 1, 3);
+                     if (fnb.isEmpty()) {
+                         System.out.println("No food and drinks");
+                     }
+                     else {
+                         Product.displayProductArray(fnb);
+                     }
+                    break;
 
-                            if (b == 1) {
-                                house.rooms.get(roomNum).displayCameras();
+                 case 4:
 
-                                int camNum = Input.inputInt("""
-                                        1. Enter camera number to change settings (0 to return): """, 0, house.rooms.get(roomNum).cameras.size());
+                     Product tempProduct = addProduct(fnbFactory, weaponFactory);
 
-                                while (true) {
+                     Class<? extends Product> prc = tempProduct.getClass();
 
-                                    if (camNum == 0) {
-                                        break;
-                                    }
+                     if (prc == Water.class || prc == Meat.class || prc == Vegetables.class){
+                         fnb.add(tempProduct);
+                     }
+                     else{
+                         weapons.add(tempProduct);
+                     }
+                     break;
 
-                                    else {
-                                        camNum--;
-                                        house.rooms.get(roomNum).cameras.get(camNum).configure();
-                                        break;
-                                    }
-                                }
-                            }
-
-                            else if (b == 2) {
-                                house.rooms.get(roomNum).displayLight();
-
-                                house.rooms.get(roomNum).light.configure();
-                            }
-                            else if (b == 3) {
-                                break;
-                            }
-                        }
-                    }
-
-            }
-
-            else if (a == 2) {
-                house.displayTemperature();
-                house.thermostat.configure();
-            }
-
-            else if (a == 3) {
-                break;
-            }
+                 case 5:
+                     return;
+             }
         }
     }
 }
